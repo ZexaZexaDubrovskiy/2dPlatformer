@@ -1,24 +1,45 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerEvents : Singleton<PlayerEvents>
+public class PlayerEvents : MonoBehaviour
 {
-    
-    private void OnCollisionEnter2D(Collision2D collision)
+    public static PlayerEvents Instance;
+    private PlayerAnimations _anim;
+    private bool _isHiting;
+
+    private void Awake()
     {
-        if (collision.collider.tag == "Heart")
+        Instance = this;
+        _anim = GetComponent<PlayerAnimations>();
+    }
+
+    private void Update()
+    {
+        _anim.IsHiting = _isHiting;
+        _isHiting = false;
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.transform.tag == "Heart")
         {
-            HeartManager.Instance.ChangeValueHeart(1);
+            HeartManager.Instance.AddHeart();
             Destroy(collision.gameObject);
         }
-        if (collision.collider.tag == "Key")
+        if (collision.transform.tag == "Key")
         {
             KeyManager.Instance.AddKey();
             Destroy(collision.gameObject);
         }
 
-
+        if (collision.transform.tag == "Obstacle")
+        {
+            HeartManager.Instance.RemoveHeart();
+            _isHiting = true;
+        }
     }
+
+
+    public void Die() => GameManager.Instance.Restart();
+
 
 }

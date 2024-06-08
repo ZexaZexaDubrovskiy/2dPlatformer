@@ -1,29 +1,46 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
 
-public class KeyManager : Singleton<KeyManager>
+public class KeyManager : MonoBehaviour
 {
-
     [SerializeField] private TextMeshProUGUI _keyTextMeshPro;
+    
+    public static KeyManager Instance;
+    public int needKeys;
     private int _keysPlayer;
 
     public int KeysPlayer
     {
-        get { return _keysPlayer; }
-        set { _keysPlayer = value; }
+        get => _keysPlayer;
+        set
+        {
+            _keysPlayer = value;
+            UpdateKeysPlayerText();
+        }
+    }
+
+    private void Start()
+    {
+        Instance = this;
+        needKeys = needKeys == 0 ? 5 : needKeys;
+        UpdateKeysPlayerText();
     }
 
     public void AddKey()
     {
-        ++KeysPlayer;
-        UpdateKeysPlayerText(KeysPlayer);
+        KeysPlayer++;
     }
 
-    private void UpdateKeysPlayerText(int KeysPlayer)
+    public void RemoveKeys()
     {
-        _keyTextMeshPro.text = $"Собрано: {KeysPlayer}/5 ключей";
+        KeysPlayer = 0;
     }
+
+    private void UpdateKeysPlayerText()
+    {
+        _keyTextMeshPro.text = $"Собрано: {KeysPlayer}/{needKeys} ключей";
+    }
+
+    public bool AllKeysCollected() => needKeys == KeysPlayer ? true : false;
 
 }

@@ -1,35 +1,55 @@
-using System;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 public class HeartManager : Singleton<HeartManager>
 {
     [SerializeField] private Image[] _hearts;
     private int _currentHealth;
+
     public int CurrentHealth
     {
         get => _currentHealth;
-        set => _currentHealth = Mathf.Clamp(value, 0, _hearts.Length);
+        set
+        {
+            _currentHealth = Mathf.Clamp(value, 0, _hearts.Length);
+            DrawHearts();
+        }
     }
 
-    private void UpdateHearts(int currentHealth)
+    private void Awake()
     {
-        CurrentHealth = currentHealth;
+        CurrentHealth = _hearts.Length;
+    }
 
+    private void DrawHearts()
+    {
         for (int i = 0; i < _hearts.Length; i++)
             _hearts[i].enabled = i < CurrentHealth;
     }
 
-    public void ResetHeart()
+    public void ResetHearts()
     {
         CurrentHealth = _hearts.Length;
-        UpdateHearts(CurrentHealth);
     }
 
-    public void ChangeValueHeart(int addOrSubValueHeart)
+    public void AddHeart()
     {
-        CurrentHealth += addOrSubValueHeart;
-        UpdateHearts(CurrentHealth);
+        if (CurrentHealth < _hearts.Length)
+        {
+            CurrentHealth++;
+        }
+    }
+
+    public void RemoveHeart()
+    {
+        if (CurrentHealth > 0)
+        {
+            CurrentHealth--;
+        }
+        else
+        {
+            PlayerEvents.Instance.Die();
+        }
     }
 
 }

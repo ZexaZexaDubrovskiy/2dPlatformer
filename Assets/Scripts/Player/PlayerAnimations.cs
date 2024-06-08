@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerAnimations : MonoBehaviour
@@ -8,6 +6,7 @@ public class PlayerAnimations : MonoBehaviour
     
     public bool IsMoving { private get; set; }
     public bool IsFlying { private get; set; }
+    public bool IsHiting { private get; set; }
     public bool IsGrounded { private get; set; }
 
     private void Start() => _animator = GetComponentInChildren<Animator>();
@@ -17,6 +16,7 @@ public class PlayerAnimations : MonoBehaviour
     {
         _animator.SetBool("IsMoving", IsMoving);
         _animator.SetBool("IsFlying", IsFlying);
+        _animator.SetBool("IsHiting", IsHiting);
     }
 
     public void Jump()
@@ -24,5 +24,4 @@ public class PlayerAnimations : MonoBehaviour
         if (_animator.GetBool("IsFlying") == false)
             _animator.SetTrigger("Jump");
     }
-
 }

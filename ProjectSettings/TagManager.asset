@@ -8,6 +8,9 @@ TagManager:
   - Heart
   - Damage
   - Key
+  - Obstacle
+  - Door
+  - player
   layers:
   - Default
   - TransparentFX
